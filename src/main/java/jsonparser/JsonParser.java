@@ -5,21 +5,44 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JsonParser {
 
-    public static void main(String[] args) throws IOException {
-        File file = new File("/home/yurii/jsonParser/src/main/resources/json/task.json");
-        String content = new String((Files.readAllBytes(file.toPath())));
-        JSONObject jsonObject = new JSONObject(content);
-        printJsonObject(jsonObject);
+    public static JSONObject readJsonFile(String file) {
+        File fileJson = new File(file);
+        String content = null;
+        try {
+            content = new String((Files.readAllBytes(fileJson.toPath())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new JSONObject(content);
     }
-    public static void printJsonObject(JSONObject jsonObject){
-        for (String key : jsonObject.keySet()) {
+
+    public static JSONObject printJsonObject(JSONObject taskjsonObject) {
+
+        for (String key : taskjsonObject.keySet()) {
             String keyStr = key;
-            Object keyValue = jsonObject.get(keyStr);
+            Object keyValue = taskjsonObject.get(keyStr);
+
+        }
+        return taskjsonObject;
+    }
+
+    public static List<JSONObject> getChildCompanies(String file) {
+        JSONObject childCompanies = (JSONObject) ((JSONObject) readJsonFile(file).get("manufacturers")).get("childCompanies");
+        List<JSONObject> companies = new ArrayList<>();
+        for (Object key : childCompanies.keySet()) {
+            String keyStr = (String) key;
+            Object keyValue = childCompanies.get(keyStr);
             System.out.println(keyStr);
             System.out.println(keyValue);
         }
+        return companies;
     }
+
 }
+
+
