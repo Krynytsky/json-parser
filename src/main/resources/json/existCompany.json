@@ -1,10 +1,5 @@
 {
   "manufacturers": {
-    "siteAddress": "Test Mfg Address",
-    "siteRegionState": "IL",
-    "reportSource": "Literature",
-    "officePhoneNumber": "+1(113)984-5656",
-    "siteName": "Test Inc Ltd",
     "childCompanies" : {
       "Amazon" : {
         "address" : "Amazon Address",

@@ -1,48 +1,36 @@
 package jsonparser;
 
-import org.json.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 public class JsonParser {
 
-    public static JSONObject readJsonFile(String file) {
-        File fileJson = new File(file);
-        String content = null;
-        try {
-            content = new String((Files.readAllBytes(fileJson.toPath())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new JSONObject(content);
+    public static void main(String[] args) throws IOException {
+        parseFromJson("/home/yurii/jsonParser/src/main/resources/json/task.json",
+                "/home/yurii/jsonParser/src/main/resources/json/notExistCompany.json");
+
     }
 
-    public static JSONObject printJsonObject(JSONObject taskjsonObject) {
 
-        for (String key : taskjsonObject.keySet()) {
-            String keyStr = key;
-            Object keyValue = taskjsonObject.get(keyStr);
+    public static void parseFromJson(String file, String file2) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Map<String, Object>> dataMap = mapper.readValue(new File(file), Map.class);
+        Map<String, Map<String, Object>> dataMap1 = mapper.readValue(new File(file2), Map.class);
 
+        Object o = dataMap.get("manufacturers").get("childCompanies");
+        Object o1 = dataMap1.get("manufacturers").get("childCompanies");
+
+        if (o.equals(o1)) {
+            System.out.println("isEquals");
+            System.out.println(o + "\n" + o1);
+        } else {
+            System.out.println("notEquals");
+            System.out.println(o + "\n" + o1);
         }
-        return taskjsonObject;
     }
-
-    public static List<JSONObject> getChildCompanies(String file) {
-        JSONObject childCompanies = (JSONObject) ((JSONObject) readJsonFile(file).get("manufacturers")).get("childCompanies");
-        List<JSONObject> companies = new ArrayList<>();
-        for (Object key : childCompanies.keySet()) {
-            String keyStr = (String) key;
-            Object keyValue = childCompanies.get(keyStr);
-            System.out.println(keyStr);
-            System.out.println(keyValue);
-        }
-        return companies;
-    }
-
 }
 
 
